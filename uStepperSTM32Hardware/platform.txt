@@ -4,8 +4,8 @@
 # For more info:
 # https://arduino.github.io/arduino-cli/latest/platform-specification/
 
-name=STM32 boards groups (Board to be selected from Tools submenu 'Board part number')
-version=2.2.0
+name=uStepper STM32 boards (Board to be selected from Tools submenu 'Board part number')
+version=0.1.0
 
 # STM compile variables
 # ----------------------
