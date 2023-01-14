@@ -1569,14 +1569,14 @@ extern "C" {
     * @param  None
     * @retval None
     */
-  /*
+  
   void TIM2_IRQHandler(void)
   {
     if (HardwareTimer_Handle[TIMER2_INDEX]) {
       HAL_TIM_IRQHandler(&HardwareTimer_Handle[TIMER2_INDEX]->handle);
     }
   }
-  */
+  
 #endif //TIM2_BASE
 
 #if defined(TIM3_BASE)
@@ -1604,12 +1604,13 @@ extern "C" {
     * @param  None
     * @retval None
     */
+   /*
   void TIM4_IRQHandler(void)
   {
     if (HardwareTimer_Handle[TIMER4_INDEX]) {
       HAL_TIM_IRQHandler(&HardwareTimer_Handle[TIMER4_INDEX]->handle);
     }
-  }
+  }*/
 #endif //TIM4_BASE
 
 #if defined(TIM5_BASE)
