@@ -115,17 +115,29 @@ void robotArmControl::begin(uint8_t device) {
 	{
 		valveCompareMatch = 4095;
 	}
+
+	uint8_t rstCnt = 0;
 	
 	DEBUG_PRINTLN("-- I Am BASE --");
     while (this->bus.requestState(ELBOW) != rdy) {
     DEBUG_PRINTLN("ELBOW NOT RDY ");
 	  delay(100);
+	  rstCnt++;
+	  if (rstCnt > 100)
+	  {
+		  NVIC_SystemReset();
+	  }
 	}
 	this->angleElbow = this->bus.requestAngle(ELBOW);
 	DEBUG_PRINTLN("-- I Am BASE --");
     while (this->bus.requestState(SHOULDER) != rdy) {
       DEBUG_PRINTLN("SHOULDER NOT RDY ");
       delay(100);
+	    rstCnt++;
+	    if (rstCnt > 100)
+	    {
+		    NVIC_SystemReset();
+	    }
     }
     this->angleBase = stepper.encoder.getAngleMoved();
     
@@ -579,7 +591,9 @@ void robotArmControl::setServo() {
   {
     return;
   }
+
   DEBUG_PRINTLN(this->filteredServo);
+  
   servoSetting = (uint16_t)(this->filteredServo*22.222222222)+1000;
   if(servoSetting < 1000)
   {
@@ -589,6 +603,7 @@ void robotArmControl::setServo() {
   {
     servoSetting = 5000;
   }
+  
   mappedServoSetting = (float)servoSetting;
   mappedServoSetting -= 1000.0;
   mappedServoSetting *= 1.6384;
@@ -597,10 +612,11 @@ void robotArmControl::setServo() {
   analogWriteFrequency(50);   //configure for 50Hz (20ms period)
   analogWriteResolution(16);  //Configure for 16bit resolution (65536 values)
   analogWrite(6, mappedServoSetting);   //output PWM to D6
+  
   //SERVO PWM 0,5ms - 2,5ms
 	//1LSB = 20ms/65536 = 0,30517578125us
-	// 0,5ms = 0,5ms/0,30517578125us = 1638,4  == 1638
-  // 2,5ms = 2,5ms/0,30517578125us = 8192
+	//0,5ms = 0,5ms/0,30517578125us = 1638,4  == 1638
+  //2,5ms = 2,5ms/0,30517578125us = 8192
 }
 
 float robotArmControl::setServo(float servoVal) {
@@ -1183,14 +1199,14 @@ void robotArmControl::setPump(bool state) {
   
   if(state)
   {
-	analogWriteFrequency(7800);
+	analogWriteFrequency(25000);
 	analogWriteResolution(12);
 	analogWrite(3, pumpCompareMatch);
   }
   else
   {
 	  pinMode(3, INPUT);
-	  analogWriteFrequency(7800);
+	  analogWriteFrequency(25000);
 	  analogWriteResolution(12);
 	  analogWrite(2, valveCompareMatch);
 	  this->valveOn = 1;
