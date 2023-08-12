@@ -928,8 +928,9 @@ void robotArmControl::sendXYZ(void) {
  //DEBUG_PRINTLN(buf);
   comm.send(buf);
 }
+
 /*To make the documentation useful we should rename or at least comment stuff so
- * that it fits with the document mogens made...*/
+ * that it fits with the document mogens made... */
 void robotArmControl::xyzToAngles(float &rot, float &left, float &right, float x, float y, float z) {
 
   /*DEBUG_PRINTLN("Position: ");
