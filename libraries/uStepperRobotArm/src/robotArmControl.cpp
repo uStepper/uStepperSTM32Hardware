@@ -14,24 +14,8 @@ uint16_t pumpCompareMatch = 254;
 
 void robotArmControl::checkConnOrientation()
 {
-  /*int32_t value;
-  float connectorOrientation[4] = {-10,10,-10,10};
-  for(int i; i<4; i++)
-  {
-    stepper.encoder.setHome();
-    stepper.moveAngle(connectorOrientation[i]);
-    while(stepper.getMotorState());
-    connectorOrientation[i] = stepper.encoder.getAngleMoved();
-    DEBUG_PRINTLN(connectorOrientation[i]);
-  }
-  if((((connectorOrientation[0] + connectorOrientation[2])/2.0) < -3.0) && (((connectorOrientation[1] + connectorOrientation[3])/2.0) > 3.0))
-  {
-    value = stepper.driver.readRegister(GCONF);
-    value ^= (1 << 4);
-    stepper.driver.writeRegister(GCONF,value);
-  }*/
 	stepper.checkOrientation(15);
-  	stepper.encoder.setHome();
+  stepper.encoder.setHome();
 }
 
 robotArmControl::robotArmControl() { pointer = this; }
@@ -66,7 +50,7 @@ void robotArmControl::begin(uint8_t device) {
       stepper.encoder.setHome();
       DEBUG_PRINTLN("-- I Am Shoulder --");
       this->direction = 1.0;
-      //this->checkConnOrientation();
+      this->checkConnOrientation();
       stepper.setHoldCurrent(40);
       this->stallSense = 2;
       this->homeSpeed = 35.0;
@@ -77,7 +61,7 @@ void robotArmControl::begin(uint8_t device) {
       DEBUG_PRINTLN("-- I Am Elbow --");
       this->direction = -1.0;
       stepper.setHoldCurrent(40);
-      //this->checkConnOrientation();
+      this->checkConnOrientation();
       this->stallSense = 2;
       this->homeSpeed = 35.0;
     }
@@ -97,7 +81,7 @@ void robotArmControl::begin(uint8_t device) {
 						   //1LSB = 20ms/65536 = 0,30517578125us
 	                        // 0,5ms = 0,5ms/0,30517578125us = 1638,4  == 1638
 	
-    //this->checkConnOrientation();
+    this->checkConnOrientation();
     stepper.setHoldCurrent(40);
 
     this->stallSense = 2;
@@ -1132,115 +1116,64 @@ void robotArmControl::runContinously(uint8_t num, float speed) {
 
 // Function for checking the constraints on the robot before moving - we can
 // decide to either move to closest possible or return fault
-uint8_t robotArmControl::checkLimits(bool correction) {
-  uint8_t jointsAllowedToMove = 0xFF;//0 = not allowed to move, 1 allowed to move. bit0 = base, bit1 = shoulder, bit2 = elbow
-  
-  if(this->angleBase < (-160.0 * GEARRATIO) && this->targetBaseSpeed < 0)
-  {
-	  DEBUG_PRINTLN("***** Base hard limits ********");
-	  DEBUG_PRINT("angleBase: ");
-	  DEBUG_PRINTLN(this->angleBase);
-	  DEBUG_PRINT("angleBaseSpeed: ");
-	  DEBUG_PRINTLN(this->targetBaseSpeed);
-	  DEBUG_PRINTLN("***** Base hard limits ********");
-    jointsAllowedToMove &= ~0x01;  //not ok
-  }
-  else if(this->angleBase > (160.0 * GEARRATIO) && this->targetBaseSpeed > 0)
-  {
-	  DEBUG_PRINTLN("***** Base hard limits ********");
-	  DEBUG_PRINT("angleBase: ");
-	  DEBUG_PRINTLN(this->angleBase);
-	  DEBUG_PRINT("angleBaseSpeed: ");
-	  DEBUG_PRINTLN(this->targetBaseSpeed);
-	  DEBUG_PRINTLN("***** Base hard limits ********");
-    jointsAllowedToMove &= ~0x01;  //not ok
-  }
+uint8_t robotArmControl::checkLimits(bool correction)
+{
+	uint8_t jointsAllowedToMove = 0xFF; //0 = not allowed to move, 1 allowed to move. bit0 = base, bit1 = shoulder, bit2 = elbow
 
-  /********Shoulder hard limits**********/
-  
-  if(this->angleShoulder > (120.0 * GEARRATIO) && this->targetShoulderSpeed > 0)
-  {
-	  DEBUG_PRINTLN("***** Shoulder hard limits ********");
-	  DEBUG_PRINT("angleShoulder: ");
-	  DEBUG_PRINTLN(this->angleShoulder);
-	  DEBUG_PRINT("angleShoulderSpeed: ");
-	  DEBUG_PRINTLN(this->targetShoulderSpeed);
-	  DEBUG_PRINTLN("***** Shoulder hard limits ********");
-    jointsAllowedToMove &= ~0x02;  //not ok
-  }
-  else if(this->angleShoulder < (11.0 * GEARRATIO) && this->targetShoulderSpeed < 0)
-  {
-	  DEBUG_PRINTLN("***** Shoulder hard limits ********");
-	  DEBUG_PRINT("angleShoulder: ");
-	  DEBUG_PRINTLN(this->angleShoulder);
-	  DEBUG_PRINT("angleShoulderSpeed: ");
-	  DEBUG_PRINTLN(this->targetShoulderSpeed);
-	  DEBUG_PRINTLN("***** Shoulder hard limits ********");
-    jointsAllowedToMove &= ~0x02;  //not ok
-  }
+	if (this->angleBase < (-160.0 * GEARRATIO) && this->targetBaseSpeed < 0)
+	{
+		jointsAllowedToMove &= ~0x01; //not ok
+	}
+	else if (this->angleBase > (160.0 * GEARRATIO) && this->targetBaseSpeed > 0)
+	{
+		jointsAllowedToMove &= ~0x01; //not ok
+	}
 
-  /***********Elbow hard limits*************/
-  
-  if(this->angleElbow < (-1.0 * GEARRATIO) && this->targetElbowSpeed < 0)
-  {
-	  DEBUG_PRINTLN("***** Elbow hard limits ********");
-	  DEBUG_PRINT("angleElbow: ");
-	  DEBUG_PRINTLN(this->angleElbow);
-	  DEBUG_PRINT("angleElbowSpeed: ");
-	  DEBUG_PRINTLN(this->targetElbowSpeed);
-	  DEBUG_PRINTLN("***** Elbow hard limits ********");
-    jointsAllowedToMove &= ~0x04;  //not ok
-  }
-  else if(this->angleElbow > (64.0 * GEARRATIO) && this->targetElbowSpeed > 0)
-  {
-	  DEBUG_PRINTLN("***** Elbow hard limits ********");
-	  DEBUG_PRINT("angleElbow: ");
-	  DEBUG_PRINTLN(this->angleElbow);
-	  DEBUG_PRINT("angleElbowSpeed: ");
-	  DEBUG_PRINTLN(this->targetElbowSpeed);
-	  DEBUG_PRINTLN("***** Elbow hard limits ********");
-    jointsAllowedToMove &= ~0x04;  //not ok
-  }
-  /**************Elbow/shoulder dynamic limits**********************/
-  if(this->angleElbow - this->angleShoulder < (7.0 * GEARRATIO))
-  {
-	  DEBUG_PRINTLN("***** ELBOW/SHOULDER DYNAMIC LIMITS ********");
-	  DEBUG_PRINT("angleElbow: ");
-	  DEBUG_PRINTLN(this->angleElbow);
-	  DEBUG_PRINT("angleElbowSpeed: ");
-	  DEBUG_PRINTLN(this->targetElbowSpeed);
-	  DEBUG_PRINT("angleShoulder: ");
-	  DEBUG_PRINTLN(this->angleShoulder);
-	  DEBUG_PRINT("angleShoulderSpeed: ");
-	  DEBUG_PRINTLN(this->targetShoulderSpeed);
-	  DEBUG_PRINTLN("***** ELBOW/SHOULDER DYNAMIC LIMITS ********");
-	  if (this->targetElbowSpeed > 0 && this->targetShoulderSpeed > 0)
-	  {
-		  //intentionally left blank 
-    }
-    else if (this->targetElbowSpeed < 0 && this->targetShoulderSpeed < 0)
-    {
-	    //intentionally left blank
-    }
-    else if(this->targetElbowSpeed < 0)
-    {
-      jointsAllowedToMove &= ~0x02; // shoulder not ok to move
-    }
-    else
-    {
-      jointsAllowedToMove &= ~0x04; // elbow not ok to move
-    }
-  }
-  if(correction == false)
-  {
-    if(this->sy == 0.0)// Due to rounding errors the y-axis can twitch even though not commanded to move
-    {
-      //DEBUG_PRINTLN("MASTER STOPPED");
-      jointsAllowedToMove &= ~0x01;// so dont move if not commanded to
-    }
-  }
-  
-  return jointsAllowedToMove;
+	/********Shoulder hard limits**********/
+	if (this->angleShoulder < (-120.0 * GEARRATIO) && this->targetShoulderSpeed > 0)
+	{
+		jointsAllowedToMove &= ~0x02; //not ok
+	}
+	else if (this->angleShoulder > (-2.0 * GEARRATIO) && this->targetShoulderSpeed < 0)
+	{
+		jointsAllowedToMove &= ~0x02; //not ok
+	}
+
+	/***********Elbow hard limits*************/
+	if (this->angleElbow < (-90.0 * GEARRATIO) && this->targetElbowSpeed > 0)
+	{
+		jointsAllowedToMove &= ~0x04; //not ok
+	}
+	else if (this->angleElbow > (-2.0 * GEARRATIO) && this->targetElbowSpeed < 0)
+	{
+		jointsAllowedToMove &= ~0x04; //not ok
+	}
+	/**************Elbow/shoulder dynamic limits**********************/
+	if (this->angleElbow - this->angleShoulder < (5.0 * GEARRATIO))
+	{
+		if (this->targetElbowSpeed < 0 && this->targetShoulderSpeed > 0)
+		{
+			//intentionally left blank
+		}
+		else if (this->targetElbowSpeed < 0)
+		{
+			jointsAllowedToMove &= ~0x02; // shoulder not ok to move
+		}
+		else
+		{
+			jointsAllowedToMove &= ~0x04; // elbow not ok to move
+		}
+	}
+	if (correction == false)
+	{
+		if (this->sy == 0.0) // Due to rounding errors the y-axis can twitch even though not commanded to move
+		{
+			DEBUG_PRINTLN("MASTER STOPPED");
+			jointsAllowedToMove &= ~0x01; // so dont move if not commanded to
+		}
+	}
+
+	return jointsAllowedToMove;
 }
 
 void robotArmControl::setPump(bool state) {
