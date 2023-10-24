@@ -38,6 +38,7 @@
 #include "interrupt.h"
 #include "lock_resource.h"
 #include "stm32yyxx_ll_exti.h"
+#include <UstepperS32.h>
 #if !defined(HAL_EXTI_MODULE_DISABLED)
 
 /* Private Types */
@@ -350,7 +351,17 @@ void EXTI1_IRQHandler(void)
   */
 void EXTI2_IRQHandler(void)
 {
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+	uint32_t pin;
+	if (ptr != NULL && getUstepperMode() == DROPIN && LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_2))
+	{
+				LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_2);
+				callbacks._dropInDirInputEXTI();
+	}
+	else
+	{
+		//NORMAL CASE:
+		HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+	}
 }
 
 /**
@@ -382,8 +393,25 @@ void EXTI4_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
   uint32_t pin;
-  for (pin = GPIO_PIN_5; pin <= GPIO_PIN_9; pin = pin << 1) {
-    HAL_GPIO_EXTI_IRQHandler(pin);
+  if (ptr != NULL && getUstepperMode() == DROPIN)
+  {
+	  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_7))
+	  {
+		  LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_7);
+		  callbacks._dropInEnableInputEXTI();
+	  }
+	  else if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_6))
+	  {
+		  LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_6);
+		  callbacks._dropInStepInputEXTI();
+	  }
+  }
+  else
+  {
+	  for (pin = GPIO_PIN_5; pin <= GPIO_PIN_9; pin = pin << 1)
+	  {
+		  HAL_GPIO_EXTI_IRQHandler(pin);
+	  }
   }
 }
 
