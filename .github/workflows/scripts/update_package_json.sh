@@ -26,6 +26,6 @@ mv "$tmp" package_test.json
 
 git config user.name "github-actions[bot]"
 git config user.email "github-actions[bot]@users.noreply.github.com"
-git add package-test.json
+git add package_test.json
 git commit -m "chore: update package.json for develop [skip ci]"
 git push origin HEAD:feature-CI/CD
