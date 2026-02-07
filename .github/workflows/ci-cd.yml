@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Compress
         run: |
-          cd ..
           echo "Workspace:"
           ls -la
           echo "Repo root:"
