@@ -1,6 +1,6 @@
 set -euo pipefail
 
-URL="https://github.com/uStepper/uStepperSTM32Hardware/releases/download/${DEV_VERSION}/${TARBALL}"
+URL="https://github.com/uStepper/uStepperSTM32Hardware/releases/download/v${DEV_VERSION}/${TARBALL}"
 
 tmp="$(mktemp)"
 jq --arg ver "$DEV_VERSION" \
