@@ -20,10 +20,16 @@ jobs:
           ls -la
           echo "Repo root:"
           ls -la uStepperSTM32Hardware
-          tar -cjf uStepperSTM32Hardware.tar.bz2 \
+          tar -cjf uStepperSTM32Hardware.tar.bz2 -C ..\
             uStepperSTM32Hardware/cores \
             uStepperSTM32Hardware/libraries \
-            uStepperSTM32Hardware/boards.txt
+            uStepperSTM32Hardware/system \
+            uStepperSTM32Hardware/variants \
+            uStepperSTM32Hardware/tools \
+            uStepperSTM32Hardware/boards.txt \
+            uStepperSTM32Hardware/kerywords.txt \
+            uStepperSTM32Hardware/platform.txt \
+            uStepperSTM32Hardware/programmers.txt
       - name: Upload tar artifact
         uses: actions/upload-artifact@v4
         with:
