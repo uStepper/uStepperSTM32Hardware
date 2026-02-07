@@ -12,76 +12,12 @@
         {
           "name": "uStepper STM32 Boards",
           "architecture": "stm32",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "category": "Contributed",
-          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/1.2.0/uStepperSTM32Hardware-1.2.0.tar.bz2",
-          "archiveFileName": "uStepperSTM32Hardware-1.2.0.tar.bz2",
-          "checksum": "SHA-256:b2d900ee62d9c6d01d3a5fa55aabc85d10460102651ef039d4e52f34fdd757a9",
-          "size": "4227900",
-          "boards": [
-            {
-              "name": "uStepper STM32 Boards"
-            }
-          ],
-          "toolsDependencies": [
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "xpack-arm-none-eabi-gcc",
-              "version": "10.3.1-2.3"
-            },
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "STM32Tools",
-              "version": "2.1.1"
-            },
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "CMSIS",
-              "version": "5.7.0"
-            }
-          ]
-        },
-        {
-          "name": "uStepper STM32 Boards",
-          "architecture": "stm32",
-          "version": "1.1.0",
-          "category": "Contributed",
-          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/1.1.0/uStepperSTM32Hardware-1.1.0.tar.bz2",
-          "archiveFileName": "uStepperSTM32Hardware-1.1.0.tar.bz2",
-          "checksum": "SHA-256:4216f54cc34678d8196c6e052419b46f1b906fbd4c8b23e1de27683ece1849b9",
-          "size": "4224366",
-          "boards": [
-            {
-              "name": "uStepper STM32 Boards"
-            }
-          ],
-          "toolsDependencies": [
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "xpack-arm-none-eabi-gcc",
-              "version": "10.3.1-2.3"
-            },
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "STM32Tools",
-              "version": "2.1.1"
-            },
-            {
-              "packager": "uStepperSTM32Boards",
-              "name": "CMSIS",
-              "version": "5.7.0"
-            }
-          ]
-        },
-        {
-          "name": "uStepper STM32 Boards",
-          "architecture": "stm32",
-          "version": "1.0.0",
-          "category": "Contributed",
-          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/1.0.0/uStepperSTM32Hardware-1.0.0.tar.bz2",
-          "archiveFileName": "uStepperSTM32Hardware-1.0.0.tar.bz2",
-          "checksum": "SHA-256:17195aa416eead7be6b535d97d26b5aa3256b6d3a1c1a73d5b1180e58c0e97ca",
-          "size": "4219523",
+          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/v1.2.1/uStepperSTM32Hardware-1.2.1.tar.bz2",
+          "archiveFileName": "uStepperSTM32Hardware-1.2.1.tar.bz2",
+          "checksum": "SHA-256:7b56ed91eb079b9f4192dafcaa772cd6eb596d6f9b7771bb4ec729ddd1139714",
+          "size": 4257215,
           "boards": [
             {
               "name": "uStepper STM32 Boards"
