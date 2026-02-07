@@ -38,12 +38,12 @@ jobs:
       # ---- BUILD STEP (tilpas til dit build) ----
       - name: Build Arduino package bundle (tar.bz2)
         run: |
-          bash .github/workflows/scripts/build_tar.sh
+          bash .github/workflows/scripts/build_tar_dev.sh
 
        #Opdatér develop package.json her
       - name: Update package.json for develop
         run: |
-          bash .github/workflows/scripts/update_package_json.sh
+          bash .github/workflows/scripts/update_package_json_dev.sh
 
       - name: Create GitHub prerelease (dev)
         uses: softprops/action-gh-release@v2

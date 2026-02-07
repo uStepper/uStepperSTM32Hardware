@@ -1,0 +1,94 @@
+name: Stable Release
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stable-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history + tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Read base version (stable)
+        id: ver
+        run: |
+          base="$(tr -d ' \n\r\t' < VERSION)"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "tag=v$base" >> "$GITHUB_OUTPUT"
+
+      - name: Guard: VERSION must be >= latest stable tag
+        run: |
+          base="${{ steps.ver.outputs.base }}"
+          if [[ ! "$base" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::VERSION must be strict SemVer X.Y.Z. Got: '$base'"
+            exit 1
+          fi
+
+          git fetch --tags --force
+          last="$(
+            git tag -l | sed 's/^v//' \
+              | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
+              | sort -V | tail -n 1
+          )"
+
+          echo "BASE=$base"
+          echo "LAST=$last"
+
+          if [[ -n "$last" ]]; then
+            if ! dpkg --compare-versions "$base" ge "$last"; then
+              echo "::error::VERSION ($base) is lower than latest stable tag ($last)."
+              exit 1
+            fi
+          fi
+
+      - name: Build Arduino package bundle (tar.bz2)
+        env:
+          BASE_VERSION: ${{ steps.ver.outputs.base }}
+        run: |
+          # IMPORTANT: build_tar.sh skal bruge BASE_VERSION på master
+          bash .github/workflows/scripts/build_tar.sh
+
+      - name: Update package.json (stable only)
+        env:
+          BASE_VERSION: ${{ steps.ver.outputs.base }}
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: |
+          bash .github/workflows/scripts/update_package_json_stable.sh
+
+      - name: Commit package.json change (if any)
+        run: |
+          if git diff --quiet; then
+            echo "No package.json change to commit."
+            exit 0
+          fi
+          git add package.json
+          git commit -m "chore: update package.json for stable ${{ steps.ver.outputs.base }} [skip ci]"
+          git push origin HEAD:master
+
+      - name: Create GitHub release (stable)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: ${{ steps.ver.outputs.tag }}
+          prerelease: false
+          generate_release_notes: false
+          body: |
+            Stable release for version ${{ steps.ver.outputs.base }}
+            Built from master branch.
+          files: |
+            ${{ env.TARBALL }}

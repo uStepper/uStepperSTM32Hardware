@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -euo pipefail
 
 ROOT="uStepperSTM32Hardware-${DEV_VERSION}"
