@@ -12,6 +12,38 @@
         {
           "name": "uStepper STM32 Boards",
           "architecture": "stm32",
+          "version": "1.2.2-dev.16",
+          "category": "Contributed",
+          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/v1.2.2-dev.16/uStepperSTM32Hardware-1.2.2-dev.16.tar.bz2",
+          "archiveFileName": "uStepperSTM32Hardware-1.2.2-dev.16.tar.bz2",
+          "checksum": "SHA-256:1187c3196bc2387dc4196bbf63fc25e7870a604d0286cdf4f4306467e70d50d7",
+          "size": "4264689",
+          "boards": [
+            {
+              "name": "uStepper STM32 Boards"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "uStepperSTM32Boards",
+              "name": "xpack-arm-none-eabi-gcc",
+              "version": "10.3.1-2.3"
+            },
+            {
+              "packager": "uStepperSTM32Boards",
+              "name": "STM32Tools",
+              "version": "2.1.1"
+            },
+            {
+              "packager": "uStepperSTM32Boards",
+              "name": "CMSIS",
+              "version": "5.7.0"
+            }
+          ]
+        },
+        {
+          "name": "uStepper STM32 Boards",
+          "architecture": "stm32",
           "version": "1.2.1-dev.15",
           "category": "Contributed",
           "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/v1.2.1-dev.15/uStepperSTM32Hardware-1.2.1-dev.15.tar.bz2",
