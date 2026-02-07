@@ -25,18 +25,22 @@ jobs:
 
       - name: Maybe bump VERSION (patch) if equals latest stable
         run: |
-          chmod +x .github/workflows/scripts/bump_version_if_equal_latest_stable.sh
-          .github/workflows/scripts/bump_version_if_equal_latest_stable.sh VERSION
+          bash .github/workflows/scripts/bump_version_if_equal_latest_stable.sh VERSION
 
       - name: Commit VERSION change (if any)
         run: |
-          if git diff --quiet; then
+      - name: Commit VERSION change (if any)
+        run: |
+          git add VERSION
+
+          # Tjek kun om der er staged ændringer (altså VERSION)
+          if git diff --cached --quiet; then
             echo "No VERSION change to commit."
             exit 0
           fi
-          git add VERSION
+
           git commit -m "chore: bump VERSION for dev cycle [skip ci]"
-          git push origin HEAD:feature-CI/CD
+          git push origin HEAD:${GITHUB_REF_NAME}
 
       - name: Read base version
         id: ver
@@ -49,14 +53,12 @@ jobs:
       # ---- BUILD STEP (tilpas til dit build) ----
       - name: Build Arduino package bundle (tar.bz2)
         run: |
-          chmod +x .github/workflows/scripts/build_tar.sh
-          .github/workflows/scripts/build_tar.sh
+          bash .github/workflows/scripts/build_tar.sh
 
        #(Valgfrit) Opdatér develop package index / package.json her
       - name: Update package.json for develop
         run: |
-          chmod +x .github/workflows/scripts/update_package_json.sh
-          .github/workflows/scripts/update_package_json.sh
+          bash .github/workflows/scripts/update_package_json.sh
 
       #- name: Create GitHub prerelease (dev)
       #  uses: softprops/action-gh-release@v2
