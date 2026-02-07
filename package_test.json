@@ -12,12 +12,12 @@
         {
           "name": "uStepper STM32 Boards",
           "architecture": "stm32",
-          "version": "1.2.1-dev.5",
+          "version": "1.2.1-dev.6",
           "category": "Contributed",
-          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/1.2.1-dev.5/uStepperSTM32Hardware-1.2.1-dev.5.tar.bz2",
-          "archiveFileName": "uStepperSTM32Hardware-1.2.1-dev.5.tar.bz2",
-          "checksum": "SHA-256:f21590b1b1f639189f1b0ed5bb0cb4a331655939dc054189fbc21041b81081e6",
-          "size": "4281170",
+          "url": "https://github.com/uStepper/uStepperSTM32Hardware/releases/download/1.2.1-dev.6/uStepperSTM32Hardware-1.2.1-dev.6.tar.bz2",
+          "archiveFileName": "uStepperSTM32Hardware-1.2.1-dev.6.tar.bz2",
+          "checksum": "SHA-256:a4cc0c62bc7eb97fe9d76476e2c58fc57a6c8a114ec073009d44854eba6c237c",
+          "size": "4281019",
           "boards": [
             {
               "name": "uStepper STM32 Boards"
