@@ -19,7 +19,9 @@
           "checksum": "SHA-256:b2d900ee62d9c6d01d3a5fa55aabc85d10460102651ef039d4e52f34fdd757a9",
           "size": "4227900",
           "boards": [
-            {"name": "uStepper STM32 Boards"}
+            {
+              "name": "uStepper STM32 Boards"
+            }
           ],
           "toolsDependencies": [
             {
@@ -49,7 +51,9 @@
           "checksum": "SHA-256:4216f54cc34678d8196c6e052419b46f1b906fbd4c8b23e1de27683ece1849b9",
           "size": "4224366",
           "boards": [
-            {"name": "uStepper STM32 Boards"}
+            {
+              "name": "uStepper STM32 Boards"
+            }
           ],
           "toolsDependencies": [
             {
@@ -79,7 +83,9 @@
           "checksum": "SHA-256:17195aa416eead7be6b535d97d26b5aa3256b6d3a1c1a73d5b1180e58c0e97ca",
           "size": "4219523",
           "boards": [
-            {"name": "uStepper STM32 Boards"}
+            {
+              "name": "uStepper STM32 Boards"
+            }
           ],
           "toolsDependencies": [
             {
@@ -104,8 +110,7 @@
         {
           "name": "xpack-arm-none-eabi-gcc",
           "version": "10.3.1-2.3",
-          "systems":
-          [
+          "systems": [
             {
               "host": "arm-linux-gnueabihf",
               "url": "https://github.com/xpack-dev-tools/arm-none-eabi-gcc-xpack/releases/download/v10.3.1-2.3/xpack-arm-none-eabi-gcc-10.3.1-2.3-linux-arm.tar.gz",
@@ -153,8 +158,7 @@
         {
           "name": "CMSIS",
           "version": "5.7.0",
-          "systems":
-          [
+          "systems": [
             {
               "host": "i686-mingw32",
               "url": "https://github.com/stm32duino/ArduinoModule-CMSIS/releases/download/5.7.0/CMSIS-5.7.0.tar.bz2",
@@ -202,8 +206,7 @@
         {
           "name": "STM32Tools",
           "version": "2.1.1",
-          "systems":
-          [
+          "systems": [
             {
               "host": "i686-mingw32",
               "url": "https://github.com/stm32duino/Arduino_Tools/releases/download/2.1.1/STM32Tools-2.1.1-windows.tar.bz2",
