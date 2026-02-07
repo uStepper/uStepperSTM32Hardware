@@ -2,7 +2,7 @@ name: Dev Release
 
 on:
   push:
-    branches: [ feature-CI/CD ]
+    branches: [ develop ]
 
 permissions:
   contents: write

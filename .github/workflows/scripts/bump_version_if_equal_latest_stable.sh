@@ -23,7 +23,7 @@ if [[ -n "$LAST_STABLE" && "$BASE_VERSION" == "$LAST_STABLE" ]]; then
   git config user.email "github-actions[bot]@users.noreply.github.com"
   git add VERSION
   git commit -m "ci: bump VERSION to $BASE_VERSION [skip ci]"
-  git push origin HEAD:feature-CI/CD
+  git push origin HEAD:develop
 fi
 
 DEV_VERSION="${BASE_VERSION}-dev.${GITHUB_RUN_NUMBER}"
