@@ -61,7 +61,7 @@ jobs:
           BASE_VERSION: ${{ steps.ver.outputs.base }}
         run: |
           # IMPORTANT: build_tar.sh skal bruge BASE_VERSION på master
-          bash .github/workflows/scripts/build_tar.sh
+          bash .github/workflows/scripts/build_tar_stable.sh
 
       - name: Update package.json (stable only)
         env:
