@@ -16,6 +16,12 @@ jobs:
       - name: Compress
         run: |
           cd ..
+          echo "Workspace:"
+          ls -la
+          echo "Repo root:"
+          ls -la uStepperSTM32Hardware
+          echo "Find candidates:"
+          find uStepperSTM32Hardware -maxdepth 2 -type d -name 'board*' -o -name 'boards*' | sed 's|^|  - |'
           tar -cjf uStepperSTM32Hardware.tar.bz2 \
             uStepperSTM32Hardware/cores \
             uStepperSTM32Hardware/libraries \
