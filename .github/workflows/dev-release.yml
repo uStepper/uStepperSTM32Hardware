@@ -25,8 +25,8 @@ jobs:
 
       - name: Maybe bump VERSION (patch) if equals latest stable
         run: |
-          chmod +x scripts/bump_version_if_equal_latest_stable.sh
-          scripts/bump_version_if_equal_latest_stable.sh VERSION
+          chmod +x .github/workflows/scripts/bump_version_if_equal_latest_stable.sh
+          .github/workflows/scripts/bump_version_if_equal_latest_stable.sh VERSION
 
       - name: Commit VERSION change (if any)
         run: |
@@ -49,14 +49,14 @@ jobs:
       # ---- BUILD STEP (tilpas til dit build) ----
       - name: Build Arduino package bundle (tar.bz2)
         run: |
-          chmod +x scripts/build_tar.sh
-          scripts/build_tar.sh
+          chmod +x .github/workflows/scripts/build_tar.sh
+          .github/workflows/scripts/build_tar.sh
 
        #(Valgfrit) Opdatér develop package index / package.json her
       - name: Update package.json for develop
         run: |
-          chmod +x update_package_json.sh
-          ./update_package_json.sh
+          chmod +x .github/workflows/scripts/update_package_json.sh
+          .github/workflows/scripts/update_package_json.sh
 
       #- name: Create GitHub prerelease (dev)
       #  uses: softprops/action-gh-release@v2
