@@ -13,7 +13,7 @@ jq --arg ver "$BASE_VERSION" \
   | if ($stable|length) == 0 then
       error("No stable platform entries found to use as template (after removing -dev.*).")
     else
-      .packages[0].platforms = [ {
+      ({
         name: $stable[0].name,
         architecture: $stable[0].architecture,
         version: $ver,
@@ -24,7 +24,14 @@ jq --arg ver "$BASE_VERSION" \
         size: $size,
         boards: $stable[0].boards,
         toolsDependencies: $stable[0].toolsDependencies
-      } ]
+      }) as $new
+      | .packages[0].platforms =
+          (
+            # behold alle stable (ingen dev), men drop evt. eksisterende samme version
+            ($stable | map(select(.version != $ver)))
+            # læg ny stable ind forrest
+            | [$new] + .
+          )
     end
 ' package.json > "$tmp"
 mv "$tmp" package.json
